@@ -7,49 +7,117 @@
 #include "listlinear.h"
 /* PROTOTYPE */
 /****************** TEST LIST KOSONG ******************/
-boolean IsEmpty (List L);
+boolean IsEmpty (List L){
+  return(First(L)==Nil);
+}
 /* Mengirim true jika list kosong */
 
 /****************** PEMBUATAN LIST KOSONG ******************/
-void CreateEmpty (List *L);
+void CreateEmpty (List *L){
+  First(L) = Nil;
+}
 /* I.S. sembarang             */
 /* F.S. Terbentuk list kosong */
 
 /****************** Manajemen Memori ******************/
-address Alokasi (infotype X);
+address Alokasi (infotype X){
+  //Kamus
+  address P;
+  //Algoritma
+  Info(P) = X;
+  Next(P) = Nil;
+  return &P;
+}
 /* Mengirimkan address hasil alokasi sebuah elemen */
 /* Jika alokasi berhasil, maka address tidak nil, dan misalnya */
 /* menghasilkan P, maka info(P)=X, Next(P)=Nil */
 /* Jika alokasi gagal, mengirimkan Nil */
-void Dealokasi (address P);
+void Dealokasi (address P){
+  P = Nil;
+}
 /* I.S. P terdefinisi */
 /* F.S. P dikembalikan ke sistem */
 /* Melakukan dealokasi/pengembalian address P */
 
 /****************** PENCARIAN SEBUAH ELEMEN LIST ******************/
-address Search (List L, infotype X);
+address Search (List L, infotype X){
+  //Kamus
+  boolean found;
+  address P;
+  //Algoritma
+  P = First(L);
+  while(P!=Nil)&&(!(found))do{
+    if(Info(P)==X){
+      found = true;
+    } else {
+      P = Next(P);
+    }
+  }
+  if(found){
+    return P;
+  } else return Nil;
+}
 /* Mencari apakah ada elemen list dengan info(P)= X */
 /* Jika ada, mengirimkan address elemen tersebut. */
 /* Jika tidak ada, mengirimkan Nil */
 
 /****************** PRIMITIF BERDASARKAN NILAI ******************/
 /*** PENAMBAHAN ELEMEN ***/
-void InsVFirst (List *L, infotype X);
+void InsVFirst (List *L, infotype X){
+  //Kamus
+  address P;
+  
+  //Algoritma
+  P = Alokasi(X);
+  Info(P) =X;
+  Next(P) = First(*L);
+  First(*L) = P;
+  
+}
 /* I.S. L mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
 /* menambahkan elemen pertama dengan nilai X jika alokasi berhasil */
-void InsVLast (List *L, infotype X);
+void InsVLast (List *L, infotype X){
+  //Kamus
+  address P;
+  
+  //Algoritma
+  Alokasi(X);
+  P = First(*L);
+  while(P!=Nil) do {
+    P = Next(P);
+  }
+  Info(Next(P)) = X;
+  
+}
 /* I.S. L mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
 /* menambahkan elemen list di akhir: elemen terakhir yang baru */
 /* bernilai X jika alokasi berhasil. Jika alokasi gagal: I.S.= F.S. */
 
 /*** PENGHAPUSAN ELEMEN ***/
-void DelVFirst (List *L, infotype * X);
+void DelVFirst (List *L, infotype * X){
+  //Kamus
+  address P;
+  //Algoritma
+  *X = Info(First(*L));
+  P = Next(First(*L));
+  First(*L) = P ;
+}
 /* I.S. List L tidak kosong  */
 /* F.S. Elemen pertama list dihapus: nilai info disimpan pada X */
 /*      dan alamat elemen pertama di-dealokasi */
-void DelVLast (List *L, infotype * X);
+void DelVLast (List *L, infotype * X){
+  //Kamus
+  address P;
+  //Algoritma
+  P = First(*L);
+  while (Next(P)!=Nil) do {
+    P = Next(P);
+  }
+  *X = Info(P);
+  Dealokasi(P);
+}
 /* I.S. list tidak kosong */
 /* F.S. Elemen terakhir list dihapus: nilai info disimpan pada X */
 /*      dan alamat elemen terakhir di-dealokasi */
@@ -97,7 +165,23 @@ void PrintInfo (List L);
 /* Contoh : jika ada tiga elemen bernilai 1, 20, 30 akan dicetak: [1,20,30] */
 /* Jika list kosong : menulis [] */
 /* Tidak ada tambahan karakter apa pun di awal, akhir, atau di tengah */
-int NbElmt (List L);
+int NbElmt (List L){
+  //Kamus
+  int count;
+  address P;
+  //Algoritma
+  if(IsEmpty(L)) {
+    return 0;
+  }else{
+    P=First(L);
+    count++;
+    while (Next(P)!=Nill) do{
+      P = Next(P);
+      count++;
+    }
+  }
+  return count;
+}
 /* Mengirimkan banyaknya elemen list; mengirimkan 0 jika list kosong */
 
 /*** Prekondisi untuk Max/Min/rata-rata : List tidak kosong ***/
@@ -105,7 +189,11 @@ infotype Max (List L);
 /* Mengirimkan nilai info(P) yang maksimum */
 
 /****************** PROSES TERHADAP LIST ******************/
-void Konkat1 (List *L1, List *L2, List *L3);
+void Konkat1 (List *L1, List *L2, List *L3){
+  //Kamus
+  
+  //Algoritma
+}
 /* I.S. L1 dan L2 sembarang */
 /* F.S. L1 dan L2 kosong, L3 adalah hasil konkatenasi L1 & L2 */
 /* Konkatenasi dua buah list : L1 dan L2    */
@@ -113,4 +201,3 @@ void Konkat1 (List *L1, List *L2, List *L3);
 /* dan L1 serta L2 menjadi list kosong.*/
 /* Tidak ada alokasi/dealokasi pada prosedur ini */
 
-#endif
